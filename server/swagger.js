@@ -9,7 +9,7 @@ const options = {
       version: "1.0.0",
     },
   },
-  apis: ["./routes/*.js"], // укажите путь к вашим роутам, где будут комментарии для Swagger
+  apis: ["./routes/*.js"],
 };
 
 const specs = swaggerJsDoc(options);

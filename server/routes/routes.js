@@ -4,14 +4,13 @@ const authenticateJWT = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Получение маршрутов с достопримечательностями
+// Получение маршрутов для текущего пользователя
 router.get("/", authenticateJWT, async (req, res) => {
   try {
-    const result = await pool.query(`
-            SELECT r.id, r.name, r.attraction_ids
-            FROM routes r
-        `);
-    console.log("Полученные маршруты:", result.rows); // Логируем результат
+    const result = await pool.query(
+      "SELECT id, name, attraction_ids FROM routes WHERE user_id = $1",
+      [req.user.id]
+    );
     res.json(result.rows);
   } catch (error) {
     console.error("Ошибка при получении маршрутов:", error);
@@ -19,11 +18,10 @@ router.get("/", authenticateJWT, async (req, res) => {
   }
 });
 
-// Создание маршрута
+// Создание нового маршрута
 router.post("/", authenticateJWT, async (req, res) => {
   const { name, attraction_ids } = req.body;
-
-  console.log("Полученные данные для создания маршрута:", req.body); // Логируем входящие данные
+  const userId = req.user.id; // Получаем id пользователя из токена
 
   if (!name || !Array.isArray(attraction_ids)) {
     return res
@@ -33,8 +31,8 @@ router.post("/", authenticateJWT, async (req, res) => {
 
   try {
     const routeResult = await pool.query(
-      "INSERT INTO routes (name, attraction_ids) VALUES ($1, $2) RETURNING id",
-      [name, attraction_ids]
+      "INSERT INTO routes (name, attraction_ids, user_id) VALUES ($1, $2, $3) RETURNING id",
+      [name, attraction_ids, userId]
     );
     const routeId = routeResult.rows[0].id;
     res.status(201).json({ message: "Маршрут создан", routeId });

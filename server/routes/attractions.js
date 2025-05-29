@@ -4,7 +4,6 @@ const authenticateJWT = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Получение всех достопримечательностей с фильтрацией
 router.get("/", async (req, res) => {
   const { district, category, maxPrice } = req.query;
   let query = "SELECT * FROM attractions WHERE 1=1";
@@ -31,7 +30,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Получение достопримечательности по ID
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   try {
