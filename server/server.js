@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth");
 const attractionRoutes = require("./routes/attractions");
 const routeRoutes = require("./routes/routes");
+const adminRoutes = require("./routes/admin"); // Новый роут для админки
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/attractions", attractionRoutes);
 app.use("/routes", routeRoutes);
+app.use("/admin", adminRoutes); // Подключаем админский роут
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
