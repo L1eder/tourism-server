@@ -4,7 +4,6 @@ const authenticateJWT = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Middleware для проверки роли администратора
 const isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
     return res
@@ -14,7 +13,6 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-// Получение всех маршрутов всех пользователей (только для админа)
 router.get("/routes", authenticateJWT, isAdmin, async (req, res) => {
   try {
     const result = await pool.query(

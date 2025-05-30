@@ -4,7 +4,6 @@ const authenticateJWT = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Получение маршрутов для текущего пользователя
 router.get("/", authenticateJWT, async (req, res) => {
   try {
     const result = await pool.query(
@@ -18,10 +17,9 @@ router.get("/", authenticateJWT, async (req, res) => {
   }
 });
 
-// Создание нового маршрута
 router.post("/", authenticateJWT, async (req, res) => {
   const { name, attraction_ids } = req.body;
-  const userId = req.user.id; // Получаем id пользователя из токена
+  const userId = req.user.id;
 
   if (!name || !Array.isArray(attraction_ids)) {
     return res
@@ -42,7 +40,6 @@ router.post("/", authenticateJWT, async (req, res) => {
   }
 });
 
-// Обновление маршрута
 router.put("/:id", authenticateJWT, async (req, res) => {
   const routeId = req.params.id;
   const { name, attraction_ids } = req.body;

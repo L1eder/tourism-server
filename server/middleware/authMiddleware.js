@@ -1,12 +1,11 @@
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config"); // Импортируем секретный ключ
+const { jwtSecret } = require("../config");
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, jwtSecret, (err, user) => {
-      // Используем секретный ключ
       if (err) {
         return res.sendStatus(403);
       }
